@@ -1,0 +1,24 @@
+{
+  "name": "kyb-infrastructure-react",
+  "version": "1.0.0",
+  "description": "KybInfrastructure for React applications",
+  "author": "Onur Kayabasi",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
+  },
+  "files": [
+    "/dist"
+  ],
+  "dependencies": {
+    "react": "^17.0.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.0.3",
+    "jest": "^27.3.1",
+    "ts-jest": "^27.0.7"
+  }
+}
