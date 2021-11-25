@@ -1,6 +1,14 @@
+/**
+ *  ApplicationContext aspects
+ * @author Onur Kayabasi
+ */
+
 import ApplicationContextCreationParameters from "./models/ApplicationContextCreationParameters";
 import { readFileSync } from "fs"
 
+/**
+ * Creates a context for the React application with some functionalities for usage of all application scope
+ */
 export default class ApplicationContext {
     private ApplicationParameters: any;
     private HttpClient: any = {} /** TO-DO: Will be obtain from kyb-infrastructure package */
@@ -22,5 +30,5 @@ export default class ApplicationContext {
             throw Error("Invalid parameter: parameters.applicationParametersPath"); /** TO-DO: Change with InvalidParameterException from kyb-infrastructure */
     }
 
-    
+
 }
