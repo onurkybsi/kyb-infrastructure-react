@@ -4,8 +4,8 @@
  */
 
 import ApplicationContextCreationParameters from "./models/ApplicationContextCreationParameters";
-import { readFileSync } from "fs"
-import { HttpClient, StringUtilities, InvalidParameterError } from "../../../../kyb-infrastructure/src/index";
+import { readFileSync } from "fs";
+import { HttpClient, StringUtilities, InvalidParameterError } from "kyb-infrastructure";
 
 /**
  * Creates a context for the React application with some functionalities for usage of all application scope

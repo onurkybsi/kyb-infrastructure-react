@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "KybInfrastructure for React applications",
   "author": "Onur Kayabasi",
+  "repository": "https://github.com/onurkybsi/kyb-infrastructure-react",
   "license": "ISC",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,6 +15,7 @@
     "/dist"
   ],
   "dependencies": {
+    "kyb-infrastructure": "^1.0.1",
     "react": "^17.0.2"
   },
   "devDependencies": {
