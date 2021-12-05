@@ -12,50 +12,107 @@ npm i kyb-infrastructure-react
 
 ## Usage
 
-```javascript
-// You can initiliaze your application as follows
+To initialize _kyb-infrastructure-react_, you must inherit your root component from `InitializerComponent` and put `ApplicationState.Provider` to top of React Nodes and set value prop as `this.state` as follows;
 
-import React, { Component } from 'react'
-import { ApplicationState, ApplicationContext } from "../../kyb-infrastructure-react/src/index";
+```` javascript
+import { ApplicationContextBase, InitializerComponent, ApplicationState } from "kyb-infrastructure-react";
+import applicationParameters from "./applicationParameters.json";
+import {
+  BrowserRouter as Router, Link, Route, Routes
+} from 'react-router-dom';
+import HelloWorldComponent from 'HelloWorldComponent';
 
-export default class App extends Component {
+export interface ApplicationContext extends ApplicationContextBase {
+  extraValue: string;
+}
+
+// You must inherit your root component from InitializerComponent, 
+// and set TContext type of it as your context type of application !
+export default class App extends InitializerComponent<any, ApplicationContext> {
   constructor(props: any) {
-    super(props);
-    this.state = {};
-  }
-
-  configureApp = () => {
-    console.log("Application configuring...");
-
-    let applicationContextSetter: (context: ApplicationContext) => void = (appContext: ApplicationContext) => {
-      this.setState({ ...appContext }, () =>
-        console.log("Application configured again!", appContext)
-      );
-    };
-    let context: ApplicationContext = ApplicationContext.getApplicationContext({
-      applicationParametersFilePath: "../applicationParameters.json",
-      backendBaseUrl: "http://localhost",
-      applicationContextSetter: applicationContextSetter
+    super(props, {
+      applicationParameters: applicationParameters,
+      backendBaseUrl: "https://jsonplaceholder.typicode.com",
+      extraValue: "some-extra"
     });
-
-    this.setState({ ...context }, () =>
-      console.log("Application configured!", context)
-    );
-  };
-
-  async componentDidMount() {
-    this.configureApp();
   }
 
   render() {
+    if (!this.state?.isContextInitialized) {
+      return <h2>Loading..</h2>;
+    }
     return (
+    // You must put ApplicationState.Provider to top of nodes ! 
       <ApplicationState.Provider value={this.state}>
-        <h1>Hello World !</h1>
-      </ApplicationState.Provider>
-    )
+        <Router>
+          <Routes>
+            <Route path="/sayHello" element={<HelloWorldComponent />} />
+            <Route path="*" element={<>
+              <h1>Welcome to kyb-infrastructure demo app!</h1>
+              <Link to="/sayHello" >
+                <a>
+                  Click for HelloWorldComponent component!
+                </a>
+              </Link>
+            </>} />
+          </Routes>
+        </Router>
+      </ApplicationState.Provider >
+    );
   }
 }
-```
+````
+
+kyb-infrastructure-react initializes a context for whole application scope by your context type. You can access the context all of components which is inherited from `BaseComponent` as follows;
+
+```` javascript
+import { BaseComponent, HttpResponse, HttpMethods } from "kyb-infrastructure-react"
+import { ApplicationContext } from 'App';
+
+type HelloWorldComponentProps = {
+};
+type HelloWorldComponentState = {
+    content: string
+};
+
+export default class HelloWorldComponent
+    extends BaseComponent<HelloWorldComponentProps, HelloWorldComponentState, ApplicationContext> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            content: ""
+        }
+    }
+
+    async componentDidMount() {
+        let response: HttpResponse | undefined = await this.getContext()
+            .httpClient?.SendRequest(HttpMethods.GET, "/posts");
+        this.setState({
+            content: JSON.stringify(response?.body)
+        })
+        this.setContext((context) => {
+            context.extraValue = `I can change the application context from any 
+            component which is inherited from BaseComponent!`
+        });
+    }
+
+    render() {
+        return (
+            <>
+                <h1>
+                    Hello World ! I can send a HTTP request via HttpClient which is a module in the application context
+                </h1>
+                <br />
+                <h2>Response from the request: </h2>
+                <br />
+                <div>
+                    {this.state.content}
+                </div>
+            </>
+        )
+    }
+}
+````
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
