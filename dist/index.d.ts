@@ -1,6 +1,6 @@
-import ApplicationContextCreationParameters from "./configuration/applicationContext/models/ApplicationContextCreationParameters";
-import ApplicationContext from "./configuration/applicationContext/ApplicationContext";
-export { ApplicationContextCreationParameters, ApplicationContext };
+import InitializerComponent from "./configuration/applicationContext/InitializerComponent";
+import BaseComponent from "./configuration/applicationContext/BaseComponent";
+import ApplicationContextBase from "./configuration/applicationContext/models/ApplicationContextBase";
+export { InitializerComponent, BaseComponent, ApplicationContextBase };
 import ApplicationState from "./configuration/ApplicationState";
-import BaseComponent from "./configuration/BaseComponent";
-export { ApplicationState, BaseComponent };
+export { ApplicationState };

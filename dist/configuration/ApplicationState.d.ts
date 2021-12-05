@@ -1,9 +1,8 @@
 /**
- * Creates a global state for React application via React context
+ * Creates a global state for a kyb-infrastructure-react application via React context API
  * @author Onur Kayabasi
  */
-/**
- * Global application state
- */
-declare const ApplicationState: any;
+import React from "react";
+import ApplicationContextBase from "./applicationContext/models/ApplicationContextBase";
+declare const ApplicationState: React.Context<ApplicationContextBase>;
 export default ApplicationState;
