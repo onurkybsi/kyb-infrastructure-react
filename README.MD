@@ -100,7 +100,8 @@ export default class HelloWorldComponent
         return (
             <>
                 <h1>
-                    Hello World ! I can send a HTTP request via HttpClient which is a module in the application context
+                    Hello World ! I can send a HTTP request via HttpClient 
+                    which is a module in the application context
                 </h1>
                 <br />
                 <h2>Response from the request: </h2>
