@@ -63,7 +63,7 @@ export default class App extends InitializerComponent<any, ApplicationContext> {
 }
 ````
 
-kyb-infrastructure-react initializes a context for whole application scope by your context type. You can access the context all of components which is inherited from `BaseComponent` as follows;
+_kyb-infrastructure-react_ initializes a context for whole application scope by your context type. You can access the context all of components which is inherited from `BaseComponent` as follows;
 
 ```` javascript
 import { BaseComponent, HttpResponse, HttpMethods } from "kyb-infrastructure-react"
