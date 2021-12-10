@@ -1,6 +1,7 @@
 import { Component, ReactNode } from 'react'
 import ApplicationContextBase from './models/ApplicationContextBase';
 import { HttpClient } from 'kyb-infrastructure';
+import ApplicationState from '../ApplicationState';
 
 /**
  * Base compotent that initializes all configuration in starting point
@@ -9,39 +10,38 @@ import { HttpClient } from 'kyb-infrastructure';
  * @author Onur Kayabasi
  */
 export default abstract class InitializerComponent<TProps, TContext extends ApplicationContextBase> extends Component<TProps, TContext> {
-    private isInitialized: boolean = false;
-
     constructor(props: TProps, initialContext: TContext) {
         super(props);
-        this.init(initialContext);
+        this.state = {
+            ...this.buildInitialContext(initialContext)
+        }
     }
 
-    private init = (initialContext: TContext) => {
-        let representiveLatency: number = 10;
-        setTimeout(() => {
-            this.setState((prevState: Readonly<TContext>) => {
-                this.isInitialized = true;
-
-                return {
-                    setContext: (setter: (currentContext: TContext) => void): void => {
-                        setter(this.state);
-                        this.setState(this.state);
-                    },
-                    applicationParameters: initialContext.applicationParameters,
-                    backendBaseUrl: initialContext.backendBaseUrl,
-                    isContextInitialized: true,
-                    httpClient: initialContext.backendBaseUrl ? new HttpClient(initialContext.backendBaseUrl) : null,
-                    ...initialContext
-                } as TContext | any;
-            });
-        }, representiveLatency);
+    private buildInitialContext = (initialContext: TContext): TContext => {
+        return {
+            setContext: (setter: (currentContext: TContext) => void): void => {
+                setter(this.state);
+                this.setState(this.state);
+            },
+            applicationParameters: initialContext.applicationParameters,
+            backendBaseUrl: initialContext.backendBaseUrl,
+            isContextInitialized: true,
+            httpClient: initialContext.backendBaseUrl ? new HttpClient(initialContext.backendBaseUrl) : null,
+            ...initialContext
+        } as TContext | any;
     }
 
-    protected abstract renderInitializer: () => ReactNode;
+    /**
+     * Child client must use this method instead of render method in initializer component!
+     */
+    protected abstract renderInitializerComponent(): ReactNode;
 
-    public render: () => ReactNode = (): ReactNode => {
-        if (!this.isInitialized)
+    override render(): ReactNode {
+        console.log("render executing, isInitialized: ", this.state)
+        if (!this.state.isContextInitialized)
             return null;
-        return this.renderInitializer();
+        return <ApplicationState.Provider value={this.state}>
+            {this.renderInitializerComponent()}
+        </ApplicationState.Provider>
     }
 }

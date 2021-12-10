@@ -10,7 +10,7 @@ export default class BaseComponent<TProps, TState, TApplicationContext extends A
     constructor(props: any) {
         super(props);
     }
-    static contextType: React.Context<ApplicationContextBase> = ApplicationState;
+    static override contextType: React.Context<ApplicationContextBase> = ApplicationState;
 
     /**
      * Receives current application context
