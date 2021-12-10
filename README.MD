@@ -12,10 +12,10 @@ npm i kyb-infrastructure-react
 
 ## Usage
 
-To initialize _kyb-infrastructure-react_, you must inherit your root component from `InitializerComponent` and put `ApplicationState.Provider` to top of React Nodes and set value prop as `this.state` as follows;
+To initialize _kyb-infrastructure-react_, you must inherit your root component from `InitializerComponent` and put your components to `renderInitializerComponent` as follows;
 
 ```` javascript
-import { ApplicationContextBase, InitializerComponent, ApplicationState } from "kyb-infrastructure-react";
+import { ApplicationContextBase, InitializerComponent } from "kyb-infrastructure-react";
 import applicationParameters from "./applicationParameters.json";
 import {
   BrowserRouter as Router, Link, Route, Routes
@@ -27,7 +27,7 @@ export interface ApplicationContext extends ApplicationContextBase {
 }
 
 // You must inherit your root component from InitializerComponent, 
-// and set TContext type of it as your context type of application !
+// and set TContext type of it as your context type of application!
 export default class App extends InitializerComponent<any, ApplicationContext> {
   constructor(props: any) {
     super(props, {
@@ -37,13 +37,11 @@ export default class App extends InitializerComponent<any, ApplicationContext> {
     });
   }
 
-  render() {
-    if (!this.state?.isContextInitialized) {
+  renderInitializerComponent() {
+    if (!this.state.isContextInitialized) {
       return <h2>Loading..</h2>;
     }
     return (
-    // You must put ApplicationState.Provider to top of nodes ! 
-      <ApplicationState.Provider value={this.state}>
         <Router>
           <Routes>
             <Route path="/sayHello" element={<HelloWorldComponent />} />
@@ -57,7 +55,6 @@ export default class App extends InitializerComponent<any, ApplicationContext> {
             </>} />
           </Routes>
         </Router>
-      </ApplicationState.Provider >
     );
   }
 }
@@ -70,8 +67,7 @@ import { BaseComponent } from "kyb-infrastructure-react"
 import { ApplicationContext } from 'App';
 import { HttpResponse, HttpMethods } from "kyb-infrastructure"
 
-type HelloWorldComponentProps = {
-};
+type HelloWorldComponentProps = {};
 type HelloWorldComponentState = {
     content: string
 };
@@ -87,7 +83,7 @@ export default class HelloWorldComponent
 
     async componentDidMount() {
         let response: HttpResponse | undefined = await this.getContext()
-            .httpClient?.SendRequest(HttpMethods.GET, "/posts");
+            .httpClient.SendRequest(HttpMethods.GET, "/posts");
         this.setState({
             content: JSON.stringify(response?.body)
         })
