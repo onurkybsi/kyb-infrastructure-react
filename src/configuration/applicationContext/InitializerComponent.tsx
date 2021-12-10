@@ -37,7 +37,6 @@ export default abstract class InitializerComponent<TProps, TContext extends Appl
     protected abstract renderInitializerComponent(): ReactNode;
 
     override render(): ReactNode {
-        console.log("render executing, isInitialized: ", this.state)
         if (!this.state.isContextInitialized)
             return null;
         return <ApplicationState.Provider value={this.state}>
